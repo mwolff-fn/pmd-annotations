@@ -1,14 +1,11 @@
-# Annotate a Pull Request based on a Checkstyle XML-report
+# Annotate pull-requests based on a PMD XML-report
 
-[![Continuous Integration](https://github.com/staabm/annotate-pull-request-from-checkstyle/workflows/Continuous%20Integration/badge.svg)](https://github.com/staabm/annotate-pull-request-from-checkstyle/actions)
-[![Continuous Deployment](https://github.com/staabm/annotate-pull-request-from-checkstyle/workflows/Continuous%20Deployment/badge.svg)](https://github.com/staabm/annotate-pull-request-from-checkstyle/actions)
+Turns PMD style XML-reports into Github pull-request [annotations via the Checks API](https://developer.github.com/v3/checks/).
+This script is meant for use within your Github Action.
 
-Turns [checkstyle based XML-Reports](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/doc/checkstyle.xsd) into Github Pull Request [Annotations via the Checks API](https://developer.github.com/v3/checks/).
-This script is meant for use within your GithubAction.
-
-That means you no longer search thru your GithubAction logfiles.
+That means you no longer have to search through your Github Action log files or the console output.
 No need to interpret messages which are formatted differently with every tool.
-Instead you can focus on your Pull Request, and you don't need to leave the Pull Request area.
+Instead you can focus on your pull-request, and you don't need to leave the pull-request area.
 
 ![Logs Example](https://github.com/mheap/phpunit-github-actions-printer/blob/master/phpunit-printer-logs.png?raw=true)
 
@@ -17,83 +14,48 @@ _Images from https://github.com/mheap/phpunit-github-actions-printer_
 
 # Installation
 
-Install the binary via composer
+Install the binary via Composer
 ```bash
-composer require staabm/annotate-pull-request-from-checkstyle
+composer require mridang/pmd-annotations
 ```
 
 # Example Usage
 
-`cs2pr` can be used on a already existing checkstyle-report xml-file. Alternatively you might use it in the unix-pipe notation to chain it into your existing cli command.
+`pmd2pr` can be used on a already existing PMD-report XML-report. Alternatively you might use it in the UNIX pipe notation to chain it into your existing cli command.
 
-Run one of the following commands within your GithubAction workflow:
+Run one of the following commands within your Github Action workflow:
 
-## Process a checkstyle formatted file
+## Process a PMD formatted file
 
 ```bash
-vendor/bin/cs2pr /path/to/checkstyle-report.xml
+vendor/bin/pmd2pr /path/to/pmd-report.xml
 ```
 
 ### Available Options
 
 - `--graceful-warnings`: Don't exit with error codes if there are only warnings
-- `--colorize`: Colorize the output. Useful if the same lint script should be used locally on the command line and remote on Github Actions. With this option, errors and warnings are better distinguishable on the command line and the output is still compatible with Github Annotations
+- `--colorize`: Colorize the output. Useful if the same lint script should be used locally on the command line and remote on Github Actions. With this option, errors and warnings are better distinguishable on the command line and the output is still compatible with Github annotations
 
 
 ## Pipe the output of another commmand
 
-... works for __any__ command which produces a checkstyle-formatted report.
+This works for __any__ command which produces a PMD-formatted report. Examples can bee seen below:
 
-Examples can bee seen below:
-
-### Using [PHPStan](https://github.com/phpstan/phpstan)
+### Using [PHPMD](https://github.com/phpmd/phpmd)
 
 ```bash
-phpstan analyse --error-format=checkstyle | vendor/bin/cs2pr
+phpmd . xml codesize,naming,unusedcode,controversial,design --exclude libs,var,build,tests --ignore-violations-on-exit | vendor/bin/pmd2pr
 ```
-
-### Using [Psalm](https://github.com/vimeo/psalm)
-
-```bash
-psalm --output-format=checkstyle | vendor/bin/cs2pr
-```
-
-_Psalm even supports the required format natively, therefore you might even use this instead:_
-
-```bash
-psalm --output-format=github
-```
-
-### Using [PHP Coding Standards Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
-
-```bash
-php-cs-fixer --format=checkstyle | vendor/bin/cs2pr
-```
-
-### Using [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
-
-```bash
-phpcs --report=checkstyle /path/to/code | vendor/bin/cs2pr
-```
-
-## phpunit support?
-
-PHPUnit does not support checkstyle, therefore `cs2pr` will not work for you.
-
-you might instead try
-- a [phpunit problem matcher](https://github.com/shivammathur/setup-php#problem-matchers)
-- a [phpunit-github-actions-printer](https://github.com/mheap/phpunit-github-actions-printer)
 
 ## Example GithubAction workflow
 
-
-If you're using `shivammathur/setup-php` to setup PHP, `cs2pr` binary is shipped within:
+If you're using `shivammathur/setup-php` to setup PHP, `pmd2pr` binary is shipped within:
 
 ```yml
 # ...
 jobs:
-    phpstan-analysis:
-      name: phpstan static code analysis
+    phpmd-analysis:
+      name: phpmd static code analysis
       runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v2
@@ -102,36 +64,30 @@ jobs:
             with:
                 php-version: 7.3
                 coverage: none # disable xdebug, pcov
-                tools: cs2pr
+                tools: pmd2pr
           - run: |
                 composer install # install your apps dependencies
-                vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr
+                vendor/bin/phpmd . xml codesize,naming,unusedcode,controversial,design --exclude libs,var,build,tests --ignore-violations-on-exit | pmd2pr
 ```
 
-If you use a custom PHP installation, then your project needs to require `staabm/annotate-pull-request-from-checkstyle`
+If you use a custom PHP installation, then your project needs to require `mridang/pmd-annotations`
 
 ```yml
 # ...
 jobs:
-    phpstan-analysis:
-      name: phpstan static code analysis
+    phpmd-analysis:
+      name: phpmd static code analysis
       runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v2
           - name: Setup PHP
-            run: # custom PHP installation 
+            run: # custom PHP installation
           - run: |
                 composer install # install your apps dependencies
-                composer require staabm/annotate-pull-request-from-checkstyle # install cs2pr
-                vendor/bin/phpstan analyse --error-format=checkstyle | vendor/bin/cs2pr
+                composer require mridang/pmd-annotations # install pmd2pr
+                vendor/bin/phpmd . xml codesize,naming,unusedcode,controversial,design --exclude libs,var,build,tests --ignore-violations-on-exit | vendor/bin/pmd2pr
 ```
 
 # Resources
 
 [GithubAction Problem Matchers](https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md)
-
-# Idea
-
-This script is based on a suggestion of [Benjamin Eberlei](https://twitter.com/beberlei/status/1218970454557372416)
-
-The Code is inspired by https://github.com/mheap/phpunit-github-actions-printer

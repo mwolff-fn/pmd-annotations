@@ -1,7 +1,11 @@
 [91m
-::error file=redaxo\src\addons\2factor_auth\boot.php,line=6::Call to static method getInstance() on an unknown class rex_one_time_password.
-[0m[93m
-::warning file=redaxo\src\addons\2factor_auth\boot.php,line=9::Call to static method getInstance() on an unknown class rex_minibar.
+::warning file=/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php,line=215::__c3_factory accesses the super-global variable $_SERVER.
 [0m[91m
-::error file=redaxo\src\addons\2factor_auth\lib\one_time_password.php,line=0::Class rex_one_time_password was not found while trying to analyse it - autoloading is probably not configured properly.
+::warning file=/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php,line=215::__c3_factory accesses the super-global variable $_SERVER.
+[0m[91m
+::warning file=/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php,line=257::__c3_exit accesses the super-global variable $_SERVER.
+[0m[91m
+::warning file=/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php,line=260::The function __c3_exit() contains an exit expression.
+[0m[91m
+::warning file=/home/runner/work/nosto-php-sdk/nosto-php-sdk/src/AbstractObject.php,line=45::The class AbstractObject has 19 children. Consider to rebalance this class hierarchy to keep number of children under 15.
 [0m

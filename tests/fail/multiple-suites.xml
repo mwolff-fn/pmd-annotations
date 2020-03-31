@@ -1,17 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle>
-    <file name="redaxo\src\addons\2factor_auth\boot.php">
-        <error line="6" column="1" severity="error" message="Call to static method getInstance() on an unknown class rex_one_time_password." />
-        <error line="9" column="1" severity="error" message="Call to static method getInstance() on an unknown class rex_minibar." />
-    </file>
-</checkstyle>
-<checkstyle>
-    <file name="redaxo\src\addons\thincache\src\thincache\CacheKeyStatic.php">
-        <error line="0" column="1" severity="error" message="Class CacheKeyStatic was not found while trying to analyse it - autoloading is probably not configured properly." />
-    </file>
-</checkstyle>
-<checkstyle>
-    <file name="redaxo\src\addons\thincache\src\thincache\CacheKeyStatic.php">
-        <error line="0" column="1" severity="error" message="Class CacheKeyStatic was not found while trying to analyse it - autoloading is probably not configured properly." />
-    </file>
-</checkstyle>
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd version="@project.version@" timestamp="2020-03-29T14:45:17+00:00">
+  <file name="/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php">
+    <violation beginline="215" endline="255" rule="Superglobals" ruleset="Controversial Rules" package="+global" externalInfoUrl="#" function="__c3_factory" priority="1">
+      __c3_factory accesses the super-global variable $_SERVER.
+    </violation>
+    <violation beginline="215" endline="255" rule="Superglobals" ruleset="Controversial Rules" package="+global" externalInfoUrl="#" function="__c3_factory" priority="1">
+      __c3_factory accesses the super-global variable $_SERVER.
+    </violation>
+  </file>
+</pmd>
+<pmd version="@project.version@" timestamp="2020-03-29T14:45:17+00:00">
+  <file name="/home/runner/work/nosto-php-sdk/nosto-php-sdk/c3.php">
+    <violation beginline="215" endline="255" rule="Superglobals" ruleset="Controversial Rules" package="+global" externalInfoUrl="#" function="__c3_factory" priority="1">
+      __c3_factory accesses the super-global variable $_SERVER.
+    </violation>
+    <violation beginline="215" endline="255" rule="Superglobals" ruleset="Controversial Rules" package="+global" externalInfoUrl="#" function="__c3_factory" priority="1">
+      __c3_factory accesses the super-global variable $_SERVER.
+    </violation>
+  </file>
+</pmd>

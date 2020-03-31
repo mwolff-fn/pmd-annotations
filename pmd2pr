@@ -2,21 +2,22 @@
 <?php
 
 /*
- * Turns checkstyle based XML-Reports into Github Pull Request Annotations via the Checks API. This script is meant for use within your GithubAction.
+ * Turns PMD based XML-Reports into Github Pull Request Annotations via the
+ Checks API. This script is meant for use within your GithubAction.
  *
- * (c) Markus Staab <markus.staab@redaxo.org>
+ * (c) Mridang Agarwalla <mridang.agarwalla@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * https://github.com/staabm/annotate-pull-request-from-checkstyle
+ * https://github.com/mridang/pmd-annotations
  */
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'stderr');
 gc_disable();
 
-$version = '1.1.1-dev';
+$version = '0.0.1';
 
 // options
 $colorize = false;
@@ -48,8 +49,8 @@ if (count($params) === 1) {
 } elseif (count($params) === 2 && file_exists($params[1])) {
     $xml = file_get_contents($params[1]);
 } else {
-    echo "cs2pr $version\n";
-    echo "Annotate a Github Pull Request based on a Checkstyle XML-report.\n";
+    echo "pmd2pr $version\n";
+    echo "Annotate a Github Pull Request based on a PMD XML-report.\n";
     echo "Usage: ". $params[0] ." [OPTION]... <filename>\n";
     echo "\n";
     echo "Supported options:\n";
@@ -70,10 +71,10 @@ if ($root === false) {
     } elseif (stripos($xml, '<?xml') !== 0) {
         fwrite(STDERR, 'Error: Expecting xml stream starting with a xml opening tag.' ."\n\n");
     } else {
-        fwrite(STDERR, 'Error: Unknown error. Expecting checkstyle formatted xml input.' ."\n\n");
+        fwrite(STDERR, 'Error: Unknown error. Expecting PMD formatted xml input.' ."\n\n");
     }
     fwrite(STDERR, $xml);
-    
+
     exit(2);
 }
 
@@ -81,14 +82,14 @@ $exit = 0;
 
 foreach ($root as $file) {
     $filename = (string)$file['name'];
+    $type = 'warning';
 
-    foreach ($file as $error) {
-        $type = (string) $error['severity'];
-        $line = (string) $error['line'];
-        $message = (string) $error['message'];
+    foreach ($file as $violation) {
+        $line = (string) $violation['beginline'];
+        $message = trim((string) $violation);
 
         $annotateType = annotateType($type);
-        annotateCheck($annotateType, relativePath($filename), $line, $message, $colorize);
+        annotateViolation($annotateType, relativePath($filename), $line, $message, $colorize);
 
         if (!$gracefulWarnings || $annotateType === 'error') {
             $exit = 1;
@@ -105,7 +106,7 @@ exit($exit);
  * @param string $message
  * @param boolean $colorize
  */
-function annotateCheck($type, $filename, $line, $message, $colorize)
+function annotateViolation($type, $filename, $line, $message, $colorize)
 {
     if ($colorize) {
         echo "\033[".($type==='error' ? '91' : '93')."m\n";
