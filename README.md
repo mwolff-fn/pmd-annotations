@@ -1,3 +1,7 @@
+> This is a fork of the mridang/pmd-annotations package which has no modifications except that it allows installing via PHP8 and has some updated dependencies.
+> I created it to use it with PHP8 immediately, until the original package will hopefully merge my changes or adopt PHP8 by itself.
+> No futher maintenance is planned on my part.
+
 # Annotate pull-requests based on a PMD XML-report
 
 Turns PMD style XML-reports into Github pull-request [annotations via the Checks API](https://developer.github.com/v3/checks/).
@@ -16,7 +20,7 @@ _Images from https://github.com/mheap/phpunit-github-actions-printer_
 
 Install the binary via Composer
 ```bash
-composer require mridang/pmd-annotations
+composer require mwolff-fn/pmd-annotations
 ```
 
 # Example Usage

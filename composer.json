@@ -1,5 +1,5 @@
 {
-  "name": "mridang/pmd-annotations",
+  "name": "mwolff-fn/pmd-annotations",
   "description": "Turns PMD style XML reports into Github pull-request annotations via the Checks API. This script is meant for use within your Github Action.",
   "license" : "MIT",
   "require" : {
